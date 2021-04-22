@@ -375,23 +375,34 @@ class ReactSlider extends React.Component {
         }
     }
 
-    // Keep the internal `value` consistent with an outside `value` if present.
-    // This basically allows the slider to be a controlled component.
-    static getDerivedStateFromProps(props, state) {
-        const value = sanitizeInValue(props.value);
+    // eslint-disable-next-line consistent-return
+    componentWillReceiveProps(nextProps) {
+        const value = sanitizeInValue(nextProps.value);
         if (!value.length) {
             return null;
         }
-
-        // Do not allow controlled upates to happen while we have pending updates
-        if (state.pending) {
-            return null;
-        }
-
-        return {
-            value: value.map(item => trimAlignValue(item, props)),
-        };
+        this.setState({ value: [...value.map(item => trimAlignValue(item, nextProps))] });
     }
+
+    // Keep the internal `value` consistent with an outside `value` if present.
+    // This basically allows the slider to be a controlled component.
+    // static getDerivedStateFromProps(props, state) {
+    //     const value = sanitizeInValue(props.value);
+    //     // eslint-disable-next-line no-console
+    //     console.log('sihuan1', value);
+    //     if (!value.length) {
+    //         return null;
+    //     }
+    //
+    //     // Do not allow controlled upates to happen while we have pending updates
+    //     if (state.pending) {
+    //         return null;
+    //     }
+    //
+    //     return {
+    //         value: value.map(item => trimAlignValue(item, props)),
+    //     };
+    // }
 
     componentDidUpdate() {
         // If an upperBound has not yet been determined (due to the component being hidden
@@ -433,6 +444,7 @@ class ReactSlider extends React.Component {
         }
 
         // Allow controlled updates to continue
+        // eslint-disable-next-line zillow/react/no-unused-state
         this.setState({ pending: false });
 
         this.hasMoved = false;
@@ -440,6 +452,7 @@ class ReactSlider extends React.Component {
 
     onMouseMove = e => {
         // Prevent controlled updates from happening while mouse is moving
+        // eslint-disable-next-line zillow/react/no-unused-state
         this.setState({ pending: true });
 
         const position = this.getMousePosition(e);
@@ -454,6 +467,7 @@ class ReactSlider extends React.Component {
         }
 
         // Prevent controlled updates from happending while touch is moving
+        // eslint-disable-next-line zillow/react/no-unused-state
         this.setState({ pending: true });
 
         const position = this.getTouchPosition(e);
@@ -481,6 +495,7 @@ class ReactSlider extends React.Component {
         }
 
         // Prevent controlled updates from happening while a key is pressed
+        // eslint-disable-next-line zillow/react/no-unused-state
         this.setState({ pending: true });
 
         switch (e.key) {
@@ -525,6 +540,7 @@ class ReactSlider extends React.Component {
         }
 
         // Prevent controlled updates from happening while mouse is moving
+        // eslint-disable-next-line zillow/react/no-unused-state
         this.setState({ pending: true });
 
         if (!this.props.snapDragDisabled) {
@@ -640,6 +656,7 @@ class ReactSlider extends React.Component {
         }
 
         // Prevent controlled updates from happending while mouse is moving
+        // eslint-disable-next-line zillow/react/no-unused-state
         this.setState({ pending: true });
 
         const position = this.getMousePosition(e);
@@ -655,6 +672,7 @@ class ReactSlider extends React.Component {
         }
 
         // Prevent controlled updates from happending while touch is moving
+        // eslint-disable-next-line zillow/react/no-unused-state
         this.setState({ pending: true });
 
         const position = this.getTouchPosition(e);
@@ -1092,7 +1110,7 @@ class ReactSlider extends React.Component {
         for (let i = 0; i < l; i += 1) {
             offset[i] = this.calcOffset(value[i], i);
         }
-
+        // eslint-disable-next-line no-console
         const tracks = this.props.withTracks ? this.renderTracks(offset) : null;
         const thumbs = this.renderThumbs(offset);
         const marks = this.props.marks ? this.renderMarks() : null;
